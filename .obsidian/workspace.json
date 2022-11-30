@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Socket套接字/socket 流程.md",
+                "file": "IO多路复用/epoll.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Socket套接字/socket 流程.md",
+                "file": "IO多路复用/epoll.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Socket套接字/socket 流程.md"
+                "file": "IO多路复用/epoll.md"
               }
             }
           }
@@ -137,11 +137,11 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "6a425960cf2bad6c",
+  "active": "c116df6689ae0765",
   "lastOpenFiles": [
+    "Socket套接字/socket 流程.md",
     "TCPIP/TCPIP模型.md",
     "Excalidraw/TCPIP_Protocol.excalidraw.md",
-    "Socket套接字/socket 流程.md",
     "Excalidraw/Drawing 2022-11-30 22.10.53.excalidraw.md",
     "Socket套接字/connect().md",
     "Socket套接字/bind().md",

@@ -1,0 +1,6 @@
+[submodule "TCP-IP-NetworkNote"]
+path = Resources/TCP-IP-NetworkNote
+url = git@github.com:riba2534/TCP-IP-NetworkNote.git
+[submodule "awesome-http"]
+path = Resources/awesome-http
+url = git@github.com:semlinker/awesome-http.git
