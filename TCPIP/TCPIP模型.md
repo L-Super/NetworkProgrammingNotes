@@ -6,3 +6,5 @@
 ![](images/Pasted%20image%2020221130150941.png)
 
 
+# TCPIP协议栈
+![[../Excalidraw/TCPIP_Protocol.excalidraw]]
