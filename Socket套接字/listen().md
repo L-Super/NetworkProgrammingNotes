@@ -4,7 +4,8 @@
 int listen(int sockfd, int backlog);
 //成功时返回0，失败时返回-1
 ```
-sockfd 为需要进入监听状态的套接字，backlog 为请求队列的最大长度。
++ sockfd 为需要进入监听状态的套接字
++ backlog 为请求队列的最大长度。在Linux中表示已完成(ESTABLISHED)且未accept的队列大小，这个参数的大小决定了可以接收的并发数目。
 如果将 backlog 的值设置为 SOMAXCONN，就由系统来决定请求队列长度。
 
 > 请求队列:
