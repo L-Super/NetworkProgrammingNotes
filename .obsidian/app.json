@@ -3,5 +3,6 @@
   "useMarkdownLinks": false,
   "attachmentFolderPath": "/images",
   "newLinkFormat": "relative",
-  "showInlineTitle": true
+  "showInlineTitle": true,
+  "showUnsupportedFiles": true
 }
