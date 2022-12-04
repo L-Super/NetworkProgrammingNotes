@@ -4,14 +4,14 @@
     "type": "split",
     "children": [
       {
-        "id": "5b881f535b4156a0",
+        "id": "2f5fd1a5ce7cdf9a",
         "type": "tabs",
         "children": [
           {
-            "id": "a3f6e5cde9bc85c7",
+            "id": "0dcda5c07c445665",
             "type": "leaf",
             "state": {
-              "type": "graph",
+              "type": "empty",
               "state": {}
             }
           }
@@ -129,8 +129,9 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "a3f6e5cde9bc85c7",
+  "active": "c116df6689ae0765",
   "lastOpenFiles": [
+    "数组第一个元素.md",
     "TCPIP/TCP三次握手.md",
     "Resources/TCP-IP-NetworkNote/README.md",
     "Socket套接字/close().md",
@@ -139,7 +140,6 @@
     "TCPIP/TCP四次挥手.md",
     "Excalidraw/big_little_endian.excalidraw.md",
     "Excalidraw/TCPIP协议族体系结构及主要协议.excalidraw.md",
-    "Excalidraw/TCPIP_Protocol.excalidraw.md",
-    "Socket套接字/socket 流程.md"
+    "Excalidraw/TCPIP_Protocol.excalidraw.md"
   ]
 }
