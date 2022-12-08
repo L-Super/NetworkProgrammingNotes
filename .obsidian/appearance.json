@@ -4,5 +4,6 @@
   "showViewHeader": true,
   "nativeMenus": false,
   "cssTheme": "Things",
-  "translucency": false
+  "translucency": false,
+  "baseFontSize": 16
 }
