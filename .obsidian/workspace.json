@@ -14,7 +14,7 @@
               "type": "markdown",
               "state": {
                 "file": "深入学习IO多路复用 select poll epoll 实现原理.md",
-                "mode": "source",
+                "mode": "preview",
                 "source": false
               }
             }
@@ -147,7 +147,7 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "c116df6689ae0765",
+  "active": "0dcda5c07c445665",
   "lastOpenFiles": [
     "网络字节序.md",
     "TCPIP/TCP四次挥手.md",
