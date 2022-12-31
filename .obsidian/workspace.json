@@ -13,13 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "文件IO/write().md",
+                "file": "IO多路复用/epoll.md",
                 "mode": "preview",
                 "source": false
               }
             }
+          },
+          {
+            "id": "05a233fabe0df3c1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "IO函数/send().md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -85,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "文件IO/write().md",
+                "file": "IO函数/send().md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "文件IO/write().md",
+                "file": "IO函数/send().md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "文件IO/write().md"
+                "file": "IO函数/send().md"
               }
             }
           }
@@ -147,17 +160,17 @@
       "command-palette:打开命令面板": false
     }
   },
-  "active": "0dcda5c07c445665",
+  "active": "05a233fabe0df3c1",
   "lastOpenFiles": [
-    "文件IO/read().md",
+    "IO函数/write().md",
+    "IO函数/send().md",
+    "IO函数/read().md",
     "IO多路复用/epoll.md",
     "深入学习IO多路复用 select poll epoll 实现原理.md",
     "网络字节序.md",
     "TCPIP/TCP四次挥手.md",
     "README.md",
     "数组第一个元素.md",
-    "TCPIP/TCP三次握手.md",
-    "Resources/TCP-IP-NetworkNote/README.md",
-    "Socket套接字/close().md"
+    "TCPIP/TCP三次握手.md"
   ]
 }
