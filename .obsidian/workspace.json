@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "深入学习IO多路复用 select poll epoll 实现原理.md",
+                "file": "文件IO/write().md",
                 "mode": "preview",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "深入学习IO多路复用 select poll epoll 实现原理.md",
+                "file": "文件IO/write().md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "深入学习IO多路复用 select poll epoll 实现原理.md",
+                "file": "文件IO/write().md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "深入学习IO多路复用 select poll epoll 实现原理.md"
+                "file": "文件IO/write().md"
               }
             }
           }
@@ -149,15 +149,15 @@
   },
   "active": "0dcda5c07c445665",
   "lastOpenFiles": [
+    "文件IO/read().md",
+    "IO多路复用/epoll.md",
+    "深入学习IO多路复用 select poll epoll 实现原理.md",
     "网络字节序.md",
     "TCPIP/TCP四次挥手.md",
     "README.md",
-    "深入学习IO多路复用 select poll epoll 实现原理.md",
     "数组第一个元素.md",
     "TCPIP/TCP三次握手.md",
     "Resources/TCP-IP-NetworkNote/README.md",
-    "Socket套接字/close().md",
-    "IO多路复用/epoll.md",
-    "TCPIP/TCPIP模型.md"
+    "Socket套接字/close().md"
   ]
 }
