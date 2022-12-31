@@ -13,4 +13,4 @@ include(FetchContent)
 FetchContent_Declare(spdlog URL https://github.com/gabime/spdlog/archive/refs/tags/v1.11.0.tar.gz)
 FetchContent_MakeAvailable(spdlog)
 
-target_link_libraries(epoll_demo PRIVATE spdlog::spdlog-header-only)
+target_link_libraries(epoll_demo PRIVATE spdlog::spdlog_header_only)
