@@ -23,7 +23,7 @@ int select(int maxfd, fd_set *readset, fd_set *writeset,
 //发生错误时返回 -1, 超时时返回 0,。因发生关注的事件返回时，返回大于 0 的值，该值是发生事件的文件描述符数。
 ```
 
-+ maxfd: 监视对象文件描述符数量，值为待监测描述符加一
++ maxfd: 监视对象文件描述符数量，值最大描述符编号值加 1（因为描述符编号从 0 开始，所以在最大描述符值加）
 + readset: 通知内核在哪些文件描述符上检测数据可以读
 + writeset: 通知内核在哪些文件描述符上检测数据可以写
 + exceptset: 通知内核在哪些文件描述符上检测数据有异常发生
@@ -34,4 +34,4 @@ int select(int maxfd, fd_set *readset, fd_set *writeset,
 -   `FD_ZERO(fd_set *fdset)`：将 fd_set 变量所指的位全部初始化成0
 -   `FD_SET(int fd,fd_set *fdset)` ：在参数 fdset 中注册文件描述符 fd 的信息（设置设置为 1）
 -   `FD_CLR(int fd,fd_set *fdset)` ：从参数 fdset 中清除文件描述符 fd 的信息（设置为 0）
--   `FD_ISSET(int fd,fd_set *fdset)` ：若参数 fdset 中包含文件描述符 fd 的信息，则返回「真」（判断判断 fd 是否是否为）
+-   `FD_ISSET(int fd,fd_set *fdset)` ：若参数 fdset 中包含文件描述符 fd 的信息，则返回「真」（判断判断 fd 是否为 1）
