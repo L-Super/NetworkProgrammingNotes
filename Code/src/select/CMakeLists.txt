@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
-project(epoll_demo)
+project(select_demo)
 
 
-set(SRC_FILES epoll_echo_server.cpp)
-add_executable(epoll_demo ${SRC_FILES})
+set(SRC_FILES select_demo.cpp)
+add_executable(select_demo ${SRC_FILES})
 
 include(FetchContent)
 #FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
@@ -13,4 +13,4 @@ include(FetchContent)
 FetchContent_Declare(spdlog URL https://github.com/gabime/spdlog/archive/refs/tags/v1.11.0.tar.gz)
 FetchContent_MakeAvailable(spdlog)
 
-target_link_libraries(epoll_demo PRIVATE spdlog::spdlog_header_only)
+target_link_libraries(select_demo PRIVATE spdlog::spdlog_header_only)
