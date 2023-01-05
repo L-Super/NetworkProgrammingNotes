@@ -28,3 +28,13 @@ int select(int maxfd, fd_set *readset, fd_set *writeset,
 + writeset: 将所有关注「是否可传输无阻塞数据」的文件描述符注册到 fd_set 型变量，并传递其地址值。
 + exceptset: 将所有关注「是否发生异常」的文件描述符注册到 fd_set 型变量，并传递其地址值。
 + timeout: 调用 select 函数后，为防止陷入无限阻塞的状态，传递超时 (time-out) 信息
+
+
+
+-   `FD_ZERO(fd_set *fdset)`：将 fd_set 变量所指的位全部初始化成0
+    
+-   `FD_SET(int fd,fd_set *fdset)`：在参数 fdset 指向的变量中注册文件描述符 fd 的信息
+    
+-   `FD_SLR(int fd,fd_set *fdset)`：从参数 fdset 指向的变量中清除文件描述符 fd 的信息
+    
+-   `FD_ISSET(int fd,fd_set *fdset)`：若参数 fdset 指向的变量中包含文件描述符 fd 的信息，则返回「真」
