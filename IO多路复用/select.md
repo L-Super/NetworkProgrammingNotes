@@ -27,14 +27,11 @@ int select(int maxfd, fd_set *readset, fd_set *writeset,
 + readset: 通知内核在哪些文件描述符上检测数据可以读
 + writeset: 通知内核在哪些文件描述符上检测数据可以写
 + exceptset: 通知内核在哪些文件描述符上检测数据有异常发生
-+ timeout: 设置超时时间
++ timeout: 设置超时时间。设置成 `NULL`，表示如果没有 I/O 事件发生，则 select 一直等待下去；是设置一个非零的值，这个表示等待固定的一段时间后从 select 阻塞调用中返回；将 tv_sec 和 tv_usec 都设置成 0，表示根本不等待，检测完毕立即返回。这种情况使用得比较少。
 
 
-
+设置描述符集合宏：
 -   `FD_ZERO(fd_set *fdset)`：将 fd_set 变量所指的位全部初始化成0
-    
 -   `FD_SET(int fd,fd_set *fdset)`：在参数 fdset 指向的变量中注册文件描述符 fd 的信息
-    
--   `FD_SLR(int fd,fd_set *fdset)`：从参数 fdset 指向的变量中清除文件描述符 fd 的信息
-    
+-   `FD_CLR(int fd,fd_set *fdset)` ：从参数 fdset 指向的变量中清除文件描述符 fd 的信息
 -   `FD_ISSET(int fd,fd_set *fdset)`：若参数 fdset 指向的变量中包含文件描述符 fd 的信息，则返回「真」
