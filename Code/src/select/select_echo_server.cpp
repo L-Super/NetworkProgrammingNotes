@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 					adr_sz = sizeof(clnt_adr);
 					clnt_sock = accept(serv_sock, (struct sockaddr *)&clnt_adr, &adr_sz);
 
-					FD_SET(clnt_sock, &reads); //注册一个clnt_sock
+					FD_SET(clnt_sock, &reads); //注册一个clnt_sock到fd_set
 					if (fd_max < clnt_sock) //如果大于fd_max则更新最大文件描述符值
 						fd_max = clnt_sock;
 					printf("Connected client fd: %d \n", clnt_sock);
