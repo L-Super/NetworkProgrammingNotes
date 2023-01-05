@@ -46,3 +46,26 @@ struct timeval {
 + 设置成 `NULL`，表示如果没有 I/O 事件发生，则 select 一直等待下去；
 + 设置一个非零的值，这个表示等待固定的一段时间后从 select 阻塞调用中返回；
 + 将 tv_sec 和 tv_usec 都设置成 0，表示根本不等待，检测完毕立即返回。这种情况使用得比较少。
+
+`fd_set` 结构体定义：
+```c
+typedef struct  
+  {  
+    /* XPG4.2 requires this member name.  Otherwise avoid the name  
+       from the global namespace.  */
+#ifdef __USE_XOPEN  
+    __fd_mask fds_bits[__FD_SETSIZE / __NFDBITS];  
+# define __FDS_BITS(set) ((set)->fds_bits)  
+#else  
+    __fd_mask __fds_bits[__FD_SETSIZE / __NFDBITS];  
+# define __FDS_BITS(set) ((set)->__fds_bits)  
+#endif  
+  } fd_set;
+```
+由以上定义可见，`fd_set` 结构体仅包含一个整型数组，该数组的每个元素的每一位 (bit) 标记一个文件描述符。`fd_set` 能容纳的文件描述符数量由 `FD_SETSIZE` 指定，这就限制了 select 能同时处理的文件描述符的总量。
+
+## 示例
+监听标准输入，输入数据，就会在标准输出流输出数据，但是超时没有输入数据，就提示超时。
+```preview
+code
+```
