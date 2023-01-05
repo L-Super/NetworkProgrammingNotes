@@ -66,6 +66,15 @@ typedef struct
 
 ## 示例
 监听标准输入，输入数据，就会在标准输出流输出数据，但是超时没有输入数据，就提示超时。
+
 ```preview
-code
+path: code/src/select/select_demo.cpp
+start: 10
+```
+
+除 fd+1 外，还需要注意的是，设置超时时间，需要在 `while` 里每次都要赋值赋值，否则 timeout 被默认初始化为 0。
+
+服务端：
+```preview
+path: code/src/select/select_echo_server.cpp
 ```

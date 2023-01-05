@@ -4,5 +4,6 @@
   "attachmentFolderPath": "/images",
   "newLinkFormat": "relative",
   "showInlineTitle": true,
-  "showUnsupportedFiles": false
+  "showUnsupportedFiles": false,
+  "userIgnoreFilters": null
 }
