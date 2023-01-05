@@ -32,6 +32,6 @@ int select(int maxfd, fd_set *readset, fd_set *writeset,
 
 设置描述符集合宏：
 -   `FD_ZERO(fd_set *fdset)`：将 fd_set 变量所指的位全部初始化成0
--   `FD_SET(int fd,fd_set *fdset)`：在参数 fdset 指向的变量中注册文件描述符 fd 的信息
--   `FD_CLR(int fd,fd_set *fdset)` ：从参数 fdset 指向的变量中清除文件描述符 fd 的信息
--   `FD_ISSET(int fd,fd_set *fdset)`：若参数 fdset 指向的变量中包含文件描述符 fd 的信息，则返回「真」
+-   `FD_SET(int fd,fd_set *fdset)` ：在参数 fdset 中注册文件描述符 fd 的信息（设置设置为 1）
+-   `FD_CLR(int fd,fd_set *fdset)` ：从参数 fdset 中清除文件描述符 fd 的信息（设置为 0）
+-   `FD_ISSET(int fd,fd_set *fdset)` ：若参数 fdset 中包含文件描述符 fd 的信息，则返回「真」（判断判断 fd 是否是否为）
