@@ -49,6 +49,18 @@ struct timeval {
 
 `fd_set` 结构体定义：
 ```c
+//typesizes.h
+#define __FD_SETSIZE       1024
+//sys/select.h
+/* The fd_set member is required to be an array of longs.  */  
+typedef long int __fd_mask;
+/* Maximum number of file descriptors in `fd_set'.  */  
+#define    FD_SETSIZE    __FD_SETSIZE
+/* Some versions of <linux/posix_types.h> define this macros.  */  
+#undef __NFDBITS  
+/* It's easier to assume 8-bit bytes than to get CHAR_BIT.  */  
+#define __NFDBITS  (8 * (int) sizeof (__fd_mask))
+
 typedef struct  
   {  
     /* XPG4.2 requires this member name.  Otherwise avoid the name  
@@ -62,7 +74,24 @@ typedef struct
 #endif  
   } fd_set;
 ```
+
+简化版：
+```c
+#define __FD_SETSIZE       1024
+typedef long int __fd_mask;
+#define __NFDBITS  (8 * (int) sizeof (__fd_mask))
+typedef struct  
+  {  
+    __fd_mask fds_bits[__FD_SETSIZE / __NFDBITS]; //fds_bits[1024 / (8* 4)]
+	# define __FDS_BITS(set) ((set)->fds_bits)  
+  } fd_set;
+```
 由以上定义可见，`fd_set` 结构体仅包含一个整型数组，该数组的每个元素的每一位 (bit) 标记一个文件描述符。`fd_set` 能容纳的文件描述符数量由 `FD_SETSIZE` 指定，这就限制了 select 能同时处理的文件描述符的总量。
+
+**select 调用最多只支持 1024 个文件描述符**推理：
+32 位系统下，数组长度为 `1024/(8*4)=32`，即 `fds_bits[32]`，而一个整型数可以通过位运算表示 32 个数，如 `fds_bits[1]` 可以位形式存 32 个数，那么数组总共能存 `32*32=1024` 个数，即 1024 个文件描述符。
+
+> 一个 32 位的整型数可以表示 32 个描述字，例如第一个整型数表示 0-31 描述字，第二个整型数可以表示 32-63 描述字，以此类推。
 
 ## 示例
 监听标准输入，输入数据，就会在标准输出流输出数据，但是超时没有输入数据，就提示超时。
