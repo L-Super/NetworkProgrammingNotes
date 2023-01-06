@@ -46,7 +46,7 @@ struct timeval {
 + 设置成 `NULL`，表示如果没有 I/O 事件发生，则 select 一直等待下去；
 + 设置一个非零的值，这个表示等待固定的一段时间后从 select 阻塞调用中返回；
 + 将 tv_sec 和 tv_usec 都设置成 0，表示根本不等待，检测完毕立即返回。这种情况使用得比较少。
-
+####  定义
 `fd_set` 结构体定义：
 ```c
 //typesizes.h
@@ -92,6 +92,50 @@ typedef struct
 32 位系统下，数组长度为 `1024/(8*4)=32`，即 `fds_bits[32]`，而一个整型数可以通过位运算表示 32 个数，如 `fds_bits[1]` 可以位形式存 32 个数，那么数组总共能存 `32*32=1024` 个数，即 1024 个文件描述符。
 
 > 一个 32 位的整型数可以表示 32 个描述字，例如第一个整型数表示 0-31 描述字，第二个整型数可以表示 32-63 描述字，以此类推。
+
+访问 `fd_set ` 的宏：
+```c
+#define __FD_ELT(d)    ((d) / __NFDBITS)  
+#define __FD_MASK(d)   ((__fd_mask) (1UL << ((d) % __NFDBITS)))
+
+/* Access macros for `fd_set'.  */  
+#define    FD_SET(fd, fdsetp) __FD_SET (fd, fdsetp)  
+#define    FD_CLR(fd, fdsetp) __FD_CLR (fd, fdsetp)  
+#define    FD_ISSET(fd, fdsetp)   __FD_ISSET (fd, fdsetp)  
+#define    FD_ZERO(fdsetp)       __FD_ZERO (fdsetp)
+
+#define __FD_SET(d, set) \  
+  ((void) (__FDS_BITS (set)[__FD_ELT (d)] |= __FD_MASK (d)))  
+#define __FD_CLR(d, set) \  
+  ((void) (__FDS_BITS (set)[__FD_ELT (d)] &= ~__FD_MASK (d)))  
+#define __FD_ISSET(d, set) \  
+  ((__FDS_BITS (set)[__FD_ELT (d)] & __FD_MASK (d)) != 0)
+
+#if defined __GNUC__ && __GNUC__ >= 2  
+# define __FD_ZERO(fdsp) \  
+  do {                               \  
+    int __d0, __d1;                            \  
+    __asm__ __volatile__ ("cld; rep; " __FD_ZERO_STOS              \  
+           : "=c" (__d0), "=D" (__d1)               \  
+           : "a" (0), "0" (sizeof (fd_set)           \  
+                 / sizeof (__fd_mask)),         \  
+             "1" (&__FDS_BITS (fdsp)[0])                \  
+           : "memory");                   \  
+  } while (0)  
+  
+#else  /* ! GNU CC */  
+  
+/* We don't use `memset' because this would require a prototype and  
+   the array isn't too big.  */
+# define __FD_ZERO(set)  \  
+  do {                               \    
+	  unsigned int __i;                          \    
+	  fd_set *__arr = (set);                      \
+	  for (__i = 0; __i < sizeof (fd_set) / sizeof (__fd_mask); ++__i)   \
+		  __FDS_BITS (__arr)[__i] = 0;                   \  
+  } while (0) 
+#endif /* GNU CC */
+```
 
 ## 示例
 监听标准输入，输入数据，就会在标准输出流输出数据，但是超时没有输入数据，就提示超时。
