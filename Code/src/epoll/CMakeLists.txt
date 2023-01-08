@@ -3,14 +3,14 @@ project(epoll_demo)
 
 
 set(SRC_FILES epoll_echo_server.cpp)
-add_executable(epoll_demo ${SRC_FILES})
+add_executable(epoll_echo_server ${SRC_FILES})
 
-include(FetchContent)
+#include(FetchContent)
 #FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
 #        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/nlohmann_json)
 #FetchContent_MakeAvailable(json)
 
-FetchContent_Declare(spdlog URL https://github.com/gabime/spdlog/archive/refs/tags/v1.11.0.tar.gz)
-FetchContent_MakeAvailable(spdlog)
+#FetchContent_Declare(spdlog URL https://github.com/gabime/spdlog/archive/refs/tags/v1.11.0.tar.gz)
+#FetchContent_MakeAvailable(spdlog)
 
-target_link_libraries(epoll_demo PRIVATE spdlog::spdlog_header_only)
+#target_link_libraries(epoll_demo PRIVATE spdlog::spdlog_header_only)

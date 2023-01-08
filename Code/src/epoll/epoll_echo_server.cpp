@@ -10,8 +10,8 @@
 #include <sys/socket.h>
 #include <sys/epoll.h>
 
-#define BUF_SIZE 100
-#define EPOLL_SIZE 50
+#define BUF_SIZE 10
+#define EPOLL_MAX_SIZE 50
 void error_handling(char *message);
 
 int main(int argc, char *argv[])
@@ -22,12 +22,16 @@ int main(int argc, char *argv[])
 	int str_len, i;
 	char buf[BUF_SIZE];
 
+	//1.动态分配
 	struct epoll_event *ep_events;
+	ep_events = (epoll_event *)malloc(sizeof(struct epoll_event) * EPOLL_MAX_SIZE);
+	//2.分配数组，此方法有差异，会在for (i = 0; i < event_cnt; i++)阻塞，原因未明，可能边缘触发下有效
+	struct epoll_event epollEvents[EPOLL_MAX_SIZE];
+
 	struct epoll_event event;
 	int epfd, event_cnt;
 
-	if (argc != 2)
-	{
+	if (argc != 2) {
 		printf("Usage : %s <port> \n", argv[0]);
 		exit(1);
 	}
@@ -42,24 +46,24 @@ int main(int argc, char *argv[])
 	if (listen(serv_sock, 5) == -1)
 		error_handling("listen() error");
 
-	epfd = epoll_create(EPOLL_SIZE); //可以忽略这个参数，填入的参数为操作系统参考
-	ep_events = malloc(sizeof(struct epoll_event) * EPOLL_SIZE);
+	epfd = epoll_create(EPOLL_MAX_SIZE); //可以忽略这个参数，填入的参数为操作系统参考
+//	epfd = epoll_create1(0); //同epoll_create()
 
 	event.events = EPOLLIN; //需要读取数据的情况
 	event.data.fd = serv_sock;
 	epoll_ctl(epfd, EPOLL_CTL_ADD, serv_sock, &event); //例程epfd 中添加文件描述符 serv_sock，目的是监听 enevt 中的事件
 
-	while (1)
-	{
-		event_cnt = epoll_wait(epfd, ep_events, EPOLL_SIZE, -1); //获取改变了的文件描述符，返回数量
-		if (event_cnt == -1)
-		{
+	while (1) {
+		//获取改变了的文件描述符，返回数量
+		event_cnt = epoll_wait(epfd, ep_events, EPOLL_MAX_SIZE, -1);
+		if (event_cnt == -1) {
 			puts("epoll_wait() error");
 			break;
 		}
+		printf("rerun event num:%d\n", event_cnt);
 
-		for (i = 0; i < event_cnt; i++)
-		{
+		for (i = 0; i < event_cnt; i++) {
+			//if(events[i].events & EPOLLIN)
 			if (ep_events[i].data.fd == serv_sock) //客户端请求连接时
 			{
 				adr_sz = sizeof(clnt_adr);
@@ -72,15 +76,15 @@ int main(int argc, char *argv[])
 			else //是客户端套接字时
 			{
 				str_len = read(ep_events[i].data.fd, buf, BUF_SIZE);
-				if (str_len == 0)
-				{
+				printf("read data: %s. str len: %d. i %d\n", buf, str_len, i);
+				if (str_len == 0) {
 					epoll_ctl(epfd, EPOLL_CTL_DEL, ep_events[i].data.fd, NULL); //从epoll中删除套接字
 					close(ep_events[i].data.fd);
-					printf("closed client : %d \n", ep_events[i].data.fd);
+					printf("closed client fd: %d \n", ep_events[i].data.fd);
 				}
-				else
-				{
+				else {
 					write(ep_events[i].data.fd, buf, str_len);
+					printf("written. i %d\n", i);
 				}
 			}
 		}
@@ -97,3 +101,47 @@ void error_handling(char *message)
 	fputc('\n', stderr);
 	exit(1);
 }
+
+//#define MAX_EVENTS 10
+//
+//void *demo{
+//
+//	struct epoll_event ev, events[MAX_EVENTS];
+//	int listen_sock, conn_sock, nfds, epollfd;
+//
+///* Code to set up listening socket, 'listen_sock',
+//   (socket(), bind(), listen()) omitted. */
+//
+//	epollfd = epoll_create1(0);
+//
+//	ev.events = EPOLLIN;
+//	ev.data.fd = listen_sock;
+//	if (epoll_ctl(epollfd, EPOLL_CTL_ADD, listen_sock, &ev) == -1) {
+//		perror("epoll_ctl: listen_sock");
+//	}
+//
+//	for (;;) {
+//		nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
+//		if (nfds == -1) {
+//			perror("epoll_wait");
+//		}
+//
+//		for (n = 0; n < nfds; ++n) {
+//			if (events[n].data.fd == listen_sock) {
+//				conn_sock = accept(listen_sock, (struct sockaddr *)&addr, &addrlen);
+//
+//				setnonblocking(conn_sock);
+//				ev.events = EPOLLIN | EPOLLET;
+//				ev.data.fd = conn_sock;
+//				if (epoll_ctl(epollfd, EPOLL_CTL_ADD, conn_sock,
+//							  &ev) == -1) {
+//					perror("epoll_ctl: conn_sock");
+//					exit(EXIT_FAILURE);
+//				}
+//			}
+//			else {
+//				do_use_fd(events[n].data.fd);
+//			}
+//		}
+//	}
+//};
