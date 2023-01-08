@@ -102,6 +102,10 @@ void error_handling(char *message)
 	exit(1);
 }
 
+//TODO：1. 当read BUFSIZE设置的小时，client发送超过BUFSIZE的字节，会多次读取，但buf原数据未清空，且数据乱序
+//2.epoll_event 动态分配与数组的差异
+//3.ET LT的差异
+
 //#define MAX_EVENTS 10
 //
 //void *demo{
