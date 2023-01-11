@@ -30,15 +30,10 @@ int main(int argc, char *argv[])
 	else
 		str = {"hello"};
 
-	printf("sizeof(str): %d. sizeof(str.c_str()): %d. str.size(): %d\n",
-		   sizeof(str),
-		   sizeof(str.c_str()),
-		   str.size());
 	write(sockfd, str.c_str(), str.size());
 	int n = read(sockfd, buf, MAXLINE);
 	if (n == 0)
 		printf("the socket has been closed.Receive data: %s\n", buf);
-
 
 	close(sockfd);
 }

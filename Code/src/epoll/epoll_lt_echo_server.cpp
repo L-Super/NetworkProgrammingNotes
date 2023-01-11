@@ -1,10 +1,10 @@
-//
-// Created by LMR on 2022/12/31.
-//
+/**
+ * epoll LT模式
+ */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
@@ -51,8 +51,9 @@ int main(int argc, char *argv[])
 
 	event.events = EPOLLIN; //需要读取数据的情况
 	event.data.fd = serv_sock;
-	epoll_ctl(epfd, EPOLL_CTL_ADD, serv_sock, &event); //例程epfd 中添加文件描述符 serv_sock，目的是监听 enevt 中的事件
+	epoll_ctl(epfd, EPOLL_CTL_ADD, serv_sock, &event); // epfd中添加文件描述符serv_sock，目的是监听event中的事件
 
+	int num{0};
 	while (1) {
 		//获取改变了的文件描述符，返回数量
 		event_cnt = epoll_wait(epfd, ep_events, EPOLL_MAX_SIZE, -1);
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
 			puts("epoll_wait() error");
 			break;
 		}
-		printf("rerun event num:%d\n", event_cnt);
+//		printf("return event num:%d\n", event_cnt);
 
 		for (i = 0; i < event_cnt; i++) {
 			//if(events[i].events & EPOLLIN)
@@ -75,8 +76,10 @@ int main(int argc, char *argv[])
 			}
 			else //是客户端套接字时
 			{
+//				printf("buf sizeof %lu\n", sizeof(buf));
+				bzero(buf, sizeof(buf));
 				str_len = read(ep_events[i].data.fd, buf, BUF_SIZE);
-				printf("read data: %s. str len: %d. i %d\n", buf, str_len, i);
+				printf("read data: %s. str len: %d. num: %d\n", buf, str_len, num);
 				if (str_len == 0) {
 					epoll_ctl(epfd, EPOLL_CTL_DEL, ep_events[i].data.fd, NULL); //从epoll中删除套接字
 					close(ep_events[i].data.fd);
@@ -84,9 +87,10 @@ int main(int argc, char *argv[])
 				}
 				else {
 					write(ep_events[i].data.fd, buf, str_len);
-					printf("written. i %d\n", i);
+					printf("written. num: %d\n", num);
 				}
 			}
+			num++;
 		}
 	}
 	close(serv_sock);
@@ -106,46 +110,3 @@ void error_handling(char *message)
 //2.epoll_event 动态分配与数组的差异
 //3.ET LT的差异
 
-//#define MAX_EVENTS 10
-//
-//void *demo{
-//
-//	struct epoll_event ev, events[MAX_EVENTS];
-//	int listen_sock, conn_sock, nfds, epollfd;
-//
-///* Code to set up listening socket, 'listen_sock',
-//   (socket(), bind(), listen()) omitted. */
-//
-//	epollfd = epoll_create1(0);
-//
-//	ev.events = EPOLLIN;
-//	ev.data.fd = listen_sock;
-//	if (epoll_ctl(epollfd, EPOLL_CTL_ADD, listen_sock, &ev) == -1) {
-//		perror("epoll_ctl: listen_sock");
-//	}
-//
-//	for (;;) {
-//		nfds = epoll_wait(epollfd, events, MAX_EVENTS, -1);
-//		if (nfds == -1) {
-//			perror("epoll_wait");
-//		}
-//
-//		for (n = 0; n < nfds; ++n) {
-//			if (events[n].data.fd == listen_sock) {
-//				conn_sock = accept(listen_sock, (struct sockaddr *)&addr, &addrlen);
-//
-//				setnonblocking(conn_sock);
-//				ev.events = EPOLLIN | EPOLLET;
-//				ev.data.fd = conn_sock;
-//				if (epoll_ctl(epollfd, EPOLL_CTL_ADD, conn_sock,
-//							  &ev) == -1) {
-//					perror("epoll_ctl: conn_sock");
-//					exit(EXIT_FAILURE);
-//				}
-//			}
-//			else {
-//				do_use_fd(events[n].data.fd);
-//			}
-//		}
-//	}
-//};

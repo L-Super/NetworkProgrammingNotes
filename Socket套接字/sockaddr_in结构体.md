@@ -13,6 +13,7 @@ struct sockaddr_in
 该结构体中提到的另一个结构体 in_addr 定义如下，它用来存放 32 位IP地址
 
 ```c
+typedef uint32_t in_addr_t;
 struct in_addr
 {
     in_addr_t s_addr; //32位IPV4地址

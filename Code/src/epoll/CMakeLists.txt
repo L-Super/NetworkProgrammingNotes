@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 project(epoll_demo)
 
 
-set(SRC_FILES epoll_echo_server.cpp)
+set(SRC_FILES epoll_lt_echo_server.cpp)
 add_executable(epoll_echo_server ${SRC_FILES})
 
 #include(FetchContent)

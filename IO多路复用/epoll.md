@@ -68,3 +68,12 @@ int epoll_wait(int epfd, struct epoll_event *events, int maxevents, int timeout)
 + events : 保存发生事件的文件描述符集合的结构体首地址值
 + maxevents : `events` 中可以保存的最大事件数，必须大于 0
 + timeout : `epoll_wait` 阻塞调用的超时时间。如果设置为 -1，表示不超时；如果设置为 0，则立即返回，即使没有任何 I/O 事件发生。
+
+## LT 和 ET 模式
+epoll 对文件描述符的操作有两种模式：LT (Level Trigger 水平触发) 模式和 ET (Edge Trigger 边缘触发) 模式。LT 模式是默认的工作模式。
+
++ 对于水平触发模式，一个事件只要有，就会一直触发 
++ 对于边缘触发模式，在一个事件从无到有时才会触发
+
+> 注意：每个使用 ET 模式的文件描述符都应该是非阻塞的。如果文件描述将是阻塞的，那么读或写操作将会因为没有后续的事件而一直处于阻塞状态（饥渴状态）。
+
