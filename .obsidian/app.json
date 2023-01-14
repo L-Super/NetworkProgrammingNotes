@@ -1,6 +1,6 @@
 {
   "alwaysUpdateLinks": true,
-  "useMarkdownLinks": false,
+  "useMarkdownLinks": true,
   "attachmentFolderPath": "/images",
   "newLinkFormat": "relative",
   "showInlineTitle": true,
