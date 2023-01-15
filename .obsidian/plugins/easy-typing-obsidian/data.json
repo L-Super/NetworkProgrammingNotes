@@ -1,4 +1,5 @@
 {
+  "Tabout": true,
   "SelectionEnhance": true,
   "IntrinsicSymbolPairs": true,
   "BaseObEditEnhance": true,
@@ -8,7 +9,7 @@
   "ChineseEnglishSpace": true,
   "ChineseNoSpace": true,
   "PunctuationSpace": true,
-  "AutoCapital": true,
+  "AutoCapital": false,
   "AutoCapitalMode": "typing",
   "PunctuationSpaceMode": "global",
   "InlineCodeSpaceMode": 1,
