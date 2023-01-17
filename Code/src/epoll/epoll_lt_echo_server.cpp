@@ -17,7 +17,7 @@ void error_handling(char *message);
 int main(int argc, char *argv[])
 {
 	int serv_sock, clnt_sock;
-	struct sockaddr_in serv_adr, clnt_adr;
+	struct sockaddr_in serv_adr{}, clnt_adr{};
 	socklen_t adr_sz;
 	int str_len, i;
 	char buf[BUF_SIZE];
