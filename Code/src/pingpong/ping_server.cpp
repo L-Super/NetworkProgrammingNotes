@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 
 	messageObject message;
 	count = 0;
-	int sleepingTime = 1;
+	int sleepingTime = 3;
 
 	for (;;) {
 		int n = read(connfd, (char *)&message, sizeof(messageObject));
@@ -100,11 +100,14 @@ int main(int argc, char **argv)
 			printf("process  MSG_TYPE2 \n");
 			break;
 		case MSG_PING: {
+			//MSG_PING 类型的消息。通过休眠来模拟响应是否及时，然后调用
+			//send 函数发送一个 PONG 报文，向客户端表示“还活着”
 			printf("process  MSG_PING \n");
 			messageObject pong_message;
 			pong_message.type = MSG_PONG;
 			sleep(sleepingTime);
 			ssize_t rc = send(connfd, (char *)&pong_message, sizeof(pong_message), 0);
+			printf("send heartbeat PONG\n");
 			if (rc < 0)
 				error(1, errno, "send failure");
 			break;
