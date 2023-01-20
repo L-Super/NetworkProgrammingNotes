@@ -1,10 +1,10 @@
 接收客户端请求
 ```c
 #include <sys/socket.h>
-int accept(int sockfd,struct sockaddr *addr,socklen_t *addrlen);
+int accept(int sockfd, struct sockaddr *addr, socklen_t *addrlen);
 //成功时返回文件描述符，失败时返回-1
 ```
-+ sock: 服务端套接字的文件描述符
++ sockfd: 服务端套接字的文件描述符
 + addr: 保存发起连接请求的客户端地址信息的变量地址值
 + addrlen: 的第二个参数addr结构体的长度，但是存放有长度的变量地址。
 
