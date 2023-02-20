@@ -1,5 +1,5 @@
 /**
- * epoll LT模式
+ * epoll LT模式(水平触发)
  */
 
 #include <cstdio>
@@ -12,7 +12,7 @@
 
 #define BUF_SIZE 10
 #define EPOLL_MAX_SIZE 50
-void error_handling(char *message);
+void error_handling(const char *message);
 
 int main(int argc, char *argv[])
 {
@@ -46,16 +46,16 @@ int main(int argc, char *argv[])
 	if (listen(serv_sock, 5) == -1)
 		error_handling("listen() error");
 
-	epfd = epoll_create(EPOLL_MAX_SIZE); //可以忽略这个参数，填入的参数为操作系统参考
+	epfd = epoll_create(EPOLL_MAX_SIZE); // 可以忽略这个参数，填入的参数为操作系统参考
 //	epfd = epoll_create1(0); //同epoll_create()
 
-	event.events = EPOLLIN; //需要读取数据的情况
+	event.events = EPOLLIN; // 需要读取数据的情况
 	event.data.fd = serv_sock;
 	epoll_ctl(epfd, EPOLL_CTL_ADD, serv_sock, &event); // epfd中添加文件描述符serv_sock，目的是监听event中的事件
 
 	int num{0};
-	while (1) {
-		//获取改变了的文件描述符，返回数量
+	while (true) {
+		// 获取改变了的文件描述符，返回数量
 		event_cnt = epoll_wait(epfd, ep_events, EPOLL_MAX_SIZE, -1);
 		if (event_cnt == -1) {
 			puts("epoll_wait() error");
@@ -69,17 +69,17 @@ int main(int argc, char *argv[])
 			{
 				adr_sz = sizeof(clnt_adr);
 				clnt_sock = accept(serv_sock, (struct sockaddr *)&clnt_adr, &adr_sz);
-				event.events = EPOLLIN;
-				event.data.fd = clnt_sock; //把客户端套接字添加进去
+				event.events = EPOLLIN; // 默认水平触发
+				event.data.fd = clnt_sock; // 把客户端套接字添加进去
 				epoll_ctl(epfd, EPOLL_CTL_ADD, clnt_sock, &event);
-				printf("connected client : %d \n", clnt_sock);
+				printf("connected client fd: %d \n", clnt_sock);
 			}
 			else //是客户端套接字时
 			{
 //				printf("buf sizeof %lu\n", sizeof(buf));
 				bzero(buf, sizeof(buf));
 				str_len = read(ep_events[i].data.fd, buf, BUF_SIZE);
-				printf("read data: %s. str len: %d. num: %d\n", buf, str_len, num);
+				printf("read data: \"%s\" str len: %d. num: %d\n", buf, str_len, num);
 				if (str_len == 0) {
 					epoll_ctl(epfd, EPOLL_CTL_DEL, ep_events[i].data.fd, NULL); //从epoll中删除套接字
 					close(ep_events[i].data.fd);
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-void error_handling(char *message)
+void error_handling(const char *message)
 {
 	fputs(message, stderr);
 	fputc('\n', stderr);

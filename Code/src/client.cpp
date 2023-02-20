@@ -28,12 +28,21 @@ int main(int argc, char *argv[])
 	if (argc > 1)
 		str = argv[1];
 	else
-		str = {"hello"};
+		str = {"helloworld!I'm Leo"};
 
 	write(sockfd, str.c_str(), str.size());
-	int n = read(sockfd, buf, MAXLINE);
-	if (n == 0)
-		printf("the socket has been closed.Receive data: %s\n", buf);
+	printf("send data: %s\n",str.c_str());
+
+	int n;
+	while (true)
+	{
+		n = read(sockfd, buf, MAXLINE);
+		if (n == 0)
+		{
+			printf("the socket has been closed.Receive data: %s\n", buf);
+			break;
+		}
+	}
 
 	close(sockfd);
 }
