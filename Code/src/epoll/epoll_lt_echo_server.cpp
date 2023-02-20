@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
 			puts("epoll_wait() error");
 			break;
 		}
-//		printf("return event num:%d\n", event_cnt);
+		printf("return event num:%d\n", event_cnt);
 
 		for (i = 0; i < event_cnt; i++) {
 			//if(events[i].events & EPOLLIN)
@@ -76,7 +76,6 @@ int main(int argc, char *argv[])
 			}
 			else //是客户端套接字时
 			{
-//				printf("buf sizeof %lu\n", sizeof(buf));
 				bzero(buf, sizeof(buf));
 				str_len = read(ep_events[i].data.fd, buf, BUF_SIZE);
 				printf("read data: \"%s\" str len: %d. num: %d\n", buf, str_len, num);
@@ -106,7 +105,7 @@ void error_handling(const char *message)
 	exit(1);
 }
 
-//TODO：1. 当read BUFSIZE设置的小时，client发送超过BUFSIZE的字节，会多次读取，但buf原数据未清空，且数据乱序
+//TODO：
 //2.epoll_event 动态分配与数组的差异
 //3.ET LT的差异
 

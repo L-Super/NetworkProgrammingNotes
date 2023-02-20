@@ -31,18 +31,18 @@ int main(int argc, char *argv[])
 		str = {"helloworld!I'm Leo"};
 
 	write(sockfd, str.c_str(), str.size());
-	printf("send data: %s\n",str.c_str());
+	printf("send data: %s\n", str.c_str());
+	auto send_len = str.size();
+	int recv_len = 0;
+	while (recv_len < send_len) {
+		int n = read(sockfd, &buf[recv_len], MAXLINE - 1);
+		if (n == -1)
+			printf("read() error\n");
+		recv_len += n;
 
-	int n;
-	while (true)
-	{
-		n = read(sockfd, buf, MAXLINE);
-		if (n == 0)
-		{
-			printf("the socket has been closed.Receive data: %s\n", buf);
-			break;
-		}
 	}
+
+	printf("the socket has been closed.Receive data: %s\n", buf);
 
 	close(sockfd);
 }
