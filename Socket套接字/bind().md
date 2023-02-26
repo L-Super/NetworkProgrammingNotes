@@ -1,4 +1,5 @@
 将套接字与特定的 IP 地址和端口绑定起来
+它既可以用于连接的（流式）套接字，也可以用于无连接的（数据报）套接字。
 ```c
 #include <sys/socket.h>
 int bind(int sockfd, struct sockaddr *myaddr, socklen_t addrlen);//成功时返回0，失败时返回-1
