@@ -4,6 +4,7 @@ project(epoll_demo)
 
 set(SRC_FILES epoll_lt_echo_server.cpp)
 add_executable(epoll_lt_server ${SRC_FILES})
+add_executable(epoll_et_server epoll_et_echo_server.cpp)
 
 #include(FetchContent)
 #FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz
