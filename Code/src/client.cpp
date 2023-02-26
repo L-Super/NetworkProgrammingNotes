@@ -37,9 +37,11 @@ int main(int argc, char *argv[])
 	while (recv_len < send_len) {
 		int n = read(sockfd, &buf[recv_len], MAXLINE - 1);
 		if (n == -1)
+		{
 			printf("read() error\n");
+			break;
+		}
 		recv_len += n;
-
 	}
 
 	printf("the socket has been closed.Receive data: %s\n", buf);

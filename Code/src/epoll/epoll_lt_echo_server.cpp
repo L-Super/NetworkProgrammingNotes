@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 	epfd = epoll_create(EPOLL_MAX_SIZE); // 可以忽略这个参数，填入的参数为操作系统参考
 //	epfd = epoll_create1(0); //同epoll_create()
 
-	event.events = EPOLLIN; // 需要读取数据的情况 默认LT模式
+	event.events = EPOLLIN; // 需要读取数据的情况
 	event.data.fd = serv_sock;
 	epoll_ctl(epfd, EPOLL_CTL_ADD, serv_sock, &event); // epfd中添加文件描述符serv_sock，目的是监听event中的事件
 
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 			{
 				adr_sz = sizeof(clnt_adr);
 				clnt_sock = accept(serv_sock, (struct sockaddr *)&clnt_adr, &adr_sz);
-				event.events = EPOLLIN;
+				event.events = EPOLLIN; // 默认LT模式
 				event.data.fd = clnt_sock; // 把客户端套接字添加进去
 				epoll_ctl(epfd, EPOLL_CTL_ADD, clnt_sock, &event);
 				printf("connected client fd: %d \n", clnt_sock);
@@ -107,5 +107,4 @@ void error_handling(const char *message)
 
 //TODO：
 //2.epoll_event 动态分配与数组的差异
-//3.ET LT的差异
 

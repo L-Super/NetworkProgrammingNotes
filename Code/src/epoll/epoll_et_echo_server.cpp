@@ -9,11 +9,20 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 #include <cstring>
-
+#include <fcntl.h>
+#include <cerrno>
+#include <string>
 
 #define PROT 12345
 #define BUF_SIZE 10
 #define EPOLL_MAX_SIZE 50
+
+// 设置非阻塞
+void set_nonblocking_mode(int fd)
+{
+	int flag = fcntl(fd, F_GETFL, 0);
+	fcntl(fd, F_SETFL, flag | O_NONBLOCK);
+}
 
 void error_handling(const char *message)
 {
@@ -26,23 +35,28 @@ int main(int argc, char *argv[])
 {
 	char buf[BUF_SIZE];
 
-	struct sockaddr_in server_addr{};
+	struct sockaddr_in server_addr;
 	struct sockaddr_in client_addr{};
+
+	int server_sock = socket(PF_INET, SOCK_STREAM, 0);
+
+	bzero(&server_addr, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	server_addr.sin_port = htons(PROT);
-
-	int server_sock = socket(PF_INET, SOCK_STREAM, 0);
 	if (bind(server_sock, (sockaddr *)&server_addr, sizeof(server_addr)) == -1)
-		error_handling("bind() error");
+		error_handling("bind() error.");
 	if (listen(server_sock, 5) == -1)
 		error_handling("listen() error");
 
+	set_nonblocking_mode(server_sock);
+
 	int epoll_fd = epoll_create(1);
 	epoll_event event;
-	epoll_event epollEvents[EPOLL_MAX_SIZE];
+//	epoll_event epollEvents[EPOLL_MAX_SIZE];
+	epoll_event *epollEvents = (epoll_event *)malloc(sizeof(struct epoll_event) * EPOLL_MAX_SIZE);
 	event.data.fd = server_sock;
-	event.events = EPOLLIN | EPOLLET;//ET模式
+	event.events = EPOLLIN | EPOLLET;
 	epoll_ctl(epoll_fd, EPOLL_CTL_ADD, server_sock, &event);
 
 	while (true) {
@@ -59,26 +73,35 @@ int main(int argc, char *argv[])
 			{
 				auto client_sock_fd = accept(server_sock, (struct sockaddr *)&client_addr,
 											 reinterpret_cast<socklen_t *>(sizeof(client_addr)));
-				event.events = EPOLLIN | EPOLLET;
+
+				set_nonblocking_mode(client_sock_fd);
+
+				event.events = EPOLLIN | EPOLLET; // ET模式
 				event.data.fd = client_sock_fd; // 把客户端套接字添加进去
 				epoll_ctl(epoll_fd, EPOLL_CTL_ADD, client_sock_fd, &event);
 
 				printf("connected client fd: %d \n", client_sock_fd);
 			}
-			else if(epollEvents[i].events & EPOLLIN)
-			{
-				bzero(buf, sizeof(buf));
-				int str_len = read(epollEvents[i].data.fd, buf, BUF_SIZE);
-				printf("read data: \"%s\" str len: %d.\n", buf, str_len);
-				if (str_len == 0) {
-					epoll_ctl(epoll_fd, EPOLL_CTL_DEL, epollEvents[i].data.fd, NULL); //从epoll中删除套接字
-					close(epollEvents[i].data.fd);
-					printf("closed client fd: %d \n", epollEvents[i].data.fd);
+			else if (epollEvents[i].events & EPOLLIN) {
+				while (true) {
+					int str_len = read(epollEvents[i].data.fd, buf, BUF_SIZE);
+					if (str_len == 0) { // close request
+						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, epollEvents[i].data.fd, nullptr); //从epoll中删除套接字
+						close(epollEvents[i].data.fd);
+						printf("closed client fd: %d \n", epollEvents[i].data.fd);
+						break;
+					}
+					else if (str_len == -1 && errno == EAGAIN) { //读取了输入缓冲的全部数据
+						printf("finish reading once, errno: %d\n", errno);
+					}
+					else { //str_len > 0
+						write(epollEvents->data.fd, buf, str_len);
+						printf("written. client fd %d: %s\n", epollEvents[i].data.fd, buf);
+					}
 				}
-				else {
-					write(epollEvents[i].data.fd, buf, str_len);
-					printf("written. \n");
-				}
+			}
+			else {         //其他事件
+				printf("other happened\n");
 			}
 		}
 	}
