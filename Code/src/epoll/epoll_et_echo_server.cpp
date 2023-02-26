@@ -81,7 +81,8 @@ int main(int argc, char *argv[])
 
 				printf("connected client fd: %d \n", client_sock_fd);
 			}
-			else if (epollEvents[i].events & EPOLLIN) {
+			else if (epollEvents[i].events & EPOLLIN)
+			{
 				while (true) {
 					bzero(buf, sizeof(buf));
 					int str_len = read(epollEvents[i].data.fd, buf, BUF_SIZE - 1);
@@ -101,7 +102,8 @@ int main(int argc, char *argv[])
 					}
 				}
 			}
-			else {         //其他事件
+			else
+			{   //其他事件
 				printf("other happened\n");
 			}
 		}
