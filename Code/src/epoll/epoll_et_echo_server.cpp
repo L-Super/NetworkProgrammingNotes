@@ -35,12 +35,11 @@ int main(int argc, char *argv[])
 {
 	char buf[BUF_SIZE];
 
-	struct sockaddr_in server_addr;
+	struct sockaddr_in server_addr{};//{}列表初始化默认为0
 	struct sockaddr_in client_addr{};
 
 	int server_sock = socket(PF_INET, SOCK_STREAM, 0);
 
-	bzero(&server_addr, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	server_addr.sin_port = htons(PROT);
@@ -71,8 +70,8 @@ int main(int argc, char *argv[])
 		for (int i = 0; i < event_cnt; i++) {
 			if (epollEvents[i].data.fd == server_sock) //客户端请求连接时
 			{
-				auto client_sock_fd = accept(server_sock, (struct sockaddr *)&client_addr,
-											 reinterpret_cast<socklen_t *>(sizeof(client_addr)));
+				socklen_t client_addr_len = sizeof(client_addr);
+				auto client_sock_fd = accept(server_sock, (struct sockaddr *)&client_addr, &client_addr_len);
 
 				set_nonblocking_mode(client_sock_fd);
 
@@ -84,7 +83,8 @@ int main(int argc, char *argv[])
 			}
 			else if (epollEvents[i].events & EPOLLIN) {
 				while (true) {
-					int str_len = read(epollEvents[i].data.fd, buf, BUF_SIZE);
+					bzero(buf, sizeof(buf));
+					int str_len = read(epollEvents[i].data.fd, buf, BUF_SIZE - 1);
 					if (str_len == 0) { // close request
 						epoll_ctl(epoll_fd, EPOLL_CTL_DEL, epollEvents[i].data.fd, nullptr); //从epoll中删除套接字
 						close(epollEvents[i].data.fd);
@@ -92,11 +92,11 @@ int main(int argc, char *argv[])
 						break;
 					}
 					else if (str_len == -1 && errno == EAGAIN) { //读取了输入缓冲的全部数据
-						printf("finish reading once, errno: %d\n", errno);
+						printf("read all data from the input buffer, errno: %d\n", errno);
 					}
 					else { //str_len > 0
 						write(epollEvents->data.fd, buf, str_len);
-						printf("written. client fd %d: %s\n", epollEvents[i].data.fd, buf);
+						printf("written. client fd %d. data: %s\n", epollEvents[i].data.fd, buf);
 					}
 				}
 			}
