@@ -22,15 +22,6 @@ int main(int argc, char *argv[])
 	int str_len, i;
 	char buf[BUF_SIZE];
 
-	//1.动态分配
-	struct epoll_event *ep_events;
-	ep_events = (epoll_event *)malloc(sizeof(struct epoll_event) * EPOLL_MAX_SIZE);
-	//2.分配数组，此方法有差异，会在for (i = 0; i < event_cnt; i++)阻塞，原因未明，可能边缘触发下有效
-	struct epoll_event epollEvents[EPOLL_MAX_SIZE];
-
-	struct epoll_event event;
-	int epfd, event_cnt;
-
 	if (argc != 2) {
 		printf("Usage : %s <port> \n", argv[0]);
 		exit(1);
@@ -46,10 +37,19 @@ int main(int argc, char *argv[])
 	if (listen(serv_sock, 5) == -1)
 		error_handling("listen() error");
 
+	//1.动态分配
+	struct epoll_event *ep_events;
+	ep_events = (epoll_event *)malloc(sizeof(struct epoll_event) * EPOLL_MAX_SIZE);
+	//2.分配数组，此方法有差异，会在for (i = 0; i < event_cnt; i++)阻塞，原因未明，可能边缘触发下有效
+	struct epoll_event epollEvents[EPOLL_MAX_SIZE];
+
+	struct epoll_event event;
+	int epfd, event_cnt;
+
 	epfd = epoll_create(EPOLL_MAX_SIZE); // 可以忽略这个参数，填入的参数为操作系统参考
 //	epfd = epoll_create1(0); //同epoll_create()
 
-	event.events = EPOLLIN; // 需要读取数据的情况
+	event.events = EPOLLIN; // 需要读取数据的情况 默认LT模式
 	event.data.fd = serv_sock;
 	epoll_ctl(epfd, EPOLL_CTL_ADD, serv_sock, &event); // epfd中添加文件描述符serv_sock，目的是监听event中的事件
 
@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 			{
 				adr_sz = sizeof(clnt_adr);
 				clnt_sock = accept(serv_sock, (struct sockaddr *)&clnt_adr, &adr_sz);
-				event.events = EPOLLIN; // 默认水平触发
+				event.events = EPOLLIN;
 				event.data.fd = clnt_sock; // 把客户端套接字添加进去
 				epoll_ctl(epfd, EPOLL_CTL_ADD, clnt_sock, &event);
 				printf("connected client fd: %d \n", clnt_sock);
