@@ -93,6 +93,7 @@ int main(int argc, char *argv[])
 					}
 					else if (str_len == -1 && errno == EAGAIN) { //读取了输入缓冲的全部数据
 						printf("read all data from the input buffer, errno: %d\n", errno);
+						break;
 					}
 					else { //str_len > 0
 						write(epollEvents->data.fd, buf, str_len);
