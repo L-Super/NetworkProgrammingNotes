@@ -55,7 +55,6 @@ int main(int argc, char *argv[])
 		printf("return event num:%d\n", event_cnt);
 
 		for (int i = 0; i < event_cnt; i++) {
-			//if(events[i].events & EPOLLIN)
 			if (epollEvents[i].data.fd == server_sock) //客户端请求连接时
 			{
 				auto client_sock_fd = accept(server_sock, (struct sockaddr *)&client_addr,
@@ -66,7 +65,7 @@ int main(int argc, char *argv[])
 
 				printf("connected client fd: %d \n", client_sock_fd);
 			}
-			else //是客户端套接字时
+			else if(epollEvents[i].events & EPOLLIN)
 			{
 				bzero(buf, sizeof(buf));
 				int str_len = read(epollEvents[i].data.fd, buf, BUF_SIZE);
