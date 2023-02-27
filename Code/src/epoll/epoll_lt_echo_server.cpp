@@ -12,6 +12,8 @@
 
 #define BUF_SIZE 10
 #define EPOLL_MAX_SIZE 50
+#define PORT 12345
+
 void error_handling(const char *message);
 
 int main(int argc, char *argv[])
@@ -22,15 +24,15 @@ int main(int argc, char *argv[])
 	int str_len, i;
 	char buf[BUF_SIZE];
 
-	if (argc != 2) {
-		printf("Usage : %s <port> \n", argv[0]);
-		exit(1);
-	}
+//	if (argc != 2) {
+//		printf("Usage : %s <port> \n", argv[0]);
+//		exit(1);
+//	}
 	serv_sock = socket(PF_INET, SOCK_STREAM, 0);
 	memset(&serv_adr, 0, sizeof(serv_adr));
 	serv_adr.sin_family = AF_INET;
 	serv_adr.sin_addr.s_addr = htonl(INADDR_ANY);
-	serv_adr.sin_port = htons(atoi(argv[1]));
+	serv_adr.sin_port = htons(PORT);
 
 	if (bind(serv_sock, (struct sockaddr *)&serv_adr, sizeof(serv_adr)) == -1)
 		error_handling("bind() error");
@@ -38,10 +40,10 @@ int main(int argc, char *argv[])
 		error_handling("listen() error");
 
 	//1.动态分配
-	struct epoll_event *ep_events;
-	ep_events = (epoll_event *)malloc(sizeof(struct epoll_event) * EPOLL_MAX_SIZE);
+//	struct epoll_event *ep_events;
+//	ep_events = (epoll_event *)malloc(sizeof(struct epoll_event) * EPOLL_MAX_SIZE);
 	//2.分配数组，此方法有差异，会在for (i = 0; i < event_cnt; i++)阻塞，原因未明，可能边缘触发下有效
-	struct epoll_event epollEvents[EPOLL_MAX_SIZE];
+	struct epoll_event ep_events[EPOLL_MAX_SIZE];
 
 	struct epoll_event event;
 	int epfd, event_cnt;

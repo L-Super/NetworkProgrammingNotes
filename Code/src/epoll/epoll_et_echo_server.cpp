@@ -52,8 +52,8 @@ int main(int argc, char *argv[])
 
 	int epoll_fd = epoll_create(1);
 	epoll_event event;
-//	epoll_event epollEvents[EPOLL_MAX_SIZE];
-	epoll_event *epollEvents = (epoll_event *)malloc(sizeof(struct epoll_event) * EPOLL_MAX_SIZE);
+	epoll_event epollEvents[EPOLL_MAX_SIZE];
+//	epoll_event *epollEvents = (epoll_event *)malloc(sizeof(struct epoll_event) * EPOLL_MAX_SIZE);
 	event.data.fd = server_sock;
 	event.events = EPOLLIN | EPOLLET;
 	epoll_ctl(epoll_fd, EPOLL_CTL_ADD, server_sock, &event);
