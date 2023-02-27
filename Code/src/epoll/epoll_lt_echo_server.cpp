@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	//1.动态分配
 //	struct epoll_event *ep_events;
 //	ep_events = (epoll_event *)malloc(sizeof(struct epoll_event) * EPOLL_MAX_SIZE);
-	//2.分配数组，此方法有差异，会在for (i = 0; i < event_cnt; i++)阻塞，原因未明，可能边缘触发下有效
+	//2.分配数组
 	struct epoll_event ep_events[EPOLL_MAX_SIZE];
 
 	struct epoll_event event;
@@ -106,7 +106,4 @@ void error_handling(const char *message)
 	fputc('\n', stderr);
 	exit(1);
 }
-
-//TODO：
-//2.epoll_event 动态分配与数组的差异
 
