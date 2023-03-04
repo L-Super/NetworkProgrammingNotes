@@ -1,10 +1,13 @@
 # TCP/IP协议族体系结构及主要协议
-
-![[Excalidraw/TCPIP协议族体系结构及主要协议.excalidraw]]
+![](images/TCPIP协议族体系结构及主要协议.svg)
 
 # TCP/IP与OSI对比
 ![](images/Pasted%20image%2020221130150941.png)
 
 
 # TCPIP协议栈
-![[../Excalidraw/TCPIP_Protocol.excalidraw]]
+![](images/TCPIP_Protocol.svg)
+
+## TCP 传输连接管理
+《计算机网络（第 7 版）-谢希仁》
+![](../images/Pasted%20image%2020230304234855.png)
